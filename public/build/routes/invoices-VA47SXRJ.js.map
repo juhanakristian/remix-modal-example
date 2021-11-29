@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["browser-route-module:/Users/juhana/projects/remix/examples/route-modal/app/routes/invoices.tsx?browser", "../../../app/routes/invoices.tsx"],
+  "sourcesContent": ["export { default } from \"/Users/juhana/projects/remix/examples/route-modal/app/routes/invoices.tsx\";", "import { Outlet } from \"react-router\";\n\nexport default function Invoices() {\n  return (\n    <>\n      <table>\n        <Outlet />\n        <thead>\n          <th>Company</th>\n        </thead>\n        <tbody>\n          <tr>\n            <td>Remix</td>\n          </tr>\n        </tbody>\n      </table>\n    </>\n  );\n}\n"],
+  "mappings": ";;;;;;;;;;AAAA;;;ACAA;AAAA,0BAAuB;AAER,oBAAoB;AACjC,SACE,0DACE,oCAAC,SAAD,MACE,oCAAC,4BAAD,OACA,oCAAC,SAAD,MACE,oCAAC,MAAD,MAAI,aAEN,oCAAC,SAAD,MACE,oCAAC,MAAD,MACE,oCAAC,MAAD,MAAI;AAAA;",
+  "names": []
+}

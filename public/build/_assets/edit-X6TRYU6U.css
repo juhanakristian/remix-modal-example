@@ -1,0 +1,10 @@
+.dialog {
+  background: hsl(0, 0%, 7%);
+}
+.label {
+  color: white;
+  padding-bottom: 10px;
+}
+.input {
+  padding-top: 10px;
+}
