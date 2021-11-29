@@ -13,12 +13,12 @@ export let links: LinksFunction = () => {
   return [
     {
       rel: "stylesheet",
-      href: styles
+      href: styles,
     },
     {
       rel: "stylesheet",
-      href: stylesUrl
-    }
+      href: stylesUrl,
+    },
   ];
 };
 
@@ -28,7 +28,7 @@ export let loader: LoaderFunction = ({ params }) => {
     company: "Remix",
     description: "Invoice for Remix license",
     amount: "200",
-    date: new Date()
+    date: "11.11.2021",
   });
 };
 
@@ -45,7 +45,7 @@ export default function Edit() {
     company: data.company,
     description: data.description,
     amount: data.amount,
-    date: data.date
+    date: data.date,
   });
 
   function handleChange(event: React.FormEvent<HTMLFormElement>) {
@@ -65,7 +65,9 @@ export default function Edit() {
       onDismiss={onDismiss}
     >
       <Form method="post" replace onChange={handleChange}>
-        <label className="label">Company</label>
+        <label className="label" htmlFor="company">
+          Company
+        </label>
         <input
           className="input"
           type="text"
@@ -73,12 +75,14 @@ export default function Edit() {
           value={formData.company}
         />
 
-        <label className="label">Description</label>
+        <label className="label" htmlFor="description">
+          Description
+        </label>
         <textarea
           className="input"
           name="description"
           value={formData.description}
-          rows={5}
+          rows={10}
         />
 
         <label className="label">Amount</label>
@@ -95,7 +99,7 @@ export default function Edit() {
           value={formData.date}
         />
 
-        <div>
+        <div className="actions">
           <button type="submit">Save</button>
           <button type="button" onClick={onDismiss}>
             Cancel

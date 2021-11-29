@@ -1,14 +1,7 @@
-.vscode
-.DS_Store
+node_modules
 
-/build/
-node_modules/
-yarn-error.log
-
-/MICHAEL_TODOS.md
-/fixtures/cloudflare
-/fixtures/test
-/fixtures/my-remix-app
-
-.eslintcache
-.cache
+/.cache
+/build
+/public/build
+/package-lock.json
+/yarn.lock%

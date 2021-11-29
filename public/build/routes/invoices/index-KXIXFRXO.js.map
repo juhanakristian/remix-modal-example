@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["browser-route-module:/Users/juhana/projects/remix/examples/route-modal/app/routes/invoices/index.tsx?browser"],
-  "sourcesContent": ["export * from \"/Users/juhana/projects/remix/examples/route-modal/app/routes/invoices/index.tsx\";"],
-  "mappings": ";;;;;AAAA;",
-  "names": []
-}

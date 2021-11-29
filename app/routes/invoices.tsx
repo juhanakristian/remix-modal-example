@@ -1,5 +1,4 @@
-import { Outlet } from "react-router";
-import { Link } from "remix";
+import { Link, Outlet } from "remix";
 
 export default function Invoices() {
   return (
