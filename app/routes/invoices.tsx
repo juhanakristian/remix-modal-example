@@ -1,6 +1,58 @@
-import { Link, Outlet } from "remix";
+import {
+  json,
+  Link,
+  LinksFunction,
+  LoaderFunction,
+  Outlet,
+  useLoaderData,
+} from "remix";
+
+import stylesUrl from "~/styles/invoices/table.css";
+
+interface Invoice {
+  id: number;
+  company: string;
+  description: string;
+  amount: number;
+}
+
+export let links: LinksFunction = () => {
+  return [
+    {
+      rel: "stylesheet",
+      href: stylesUrl,
+    },
+  ];
+};
+
+export let loader: LoaderFunction = ({ params }) => {
+  return json([
+    {
+      id: 1,
+      company: "Remix",
+      description: "Invoice for Remix license",
+      amount: "200",
+    },
+
+    {
+      id: 2,
+      company: "Remix",
+      description: "Invoice for Remix license",
+      amount: "200",
+    },
+
+    {
+      id: 3,
+      company: "Remix",
+      description: "Invoice for Remix license",
+      amount: "200",
+    },
+  ]);
+};
 
 export default function Invoices() {
+  const data = useLoaderData();
+
   return (
     <>
       <Outlet />
@@ -16,16 +68,17 @@ export default function Invoices() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Remix</td>
-            <td>Invoice for Remix license</td>
-            <td>$200</td>
-            <td>10/10/2021</td>
-            <td>
-              <Link to="/invoices/1/edit">Edit</Link>
-            </td>
-          </tr>
+          {data.map((invoice: Invoice) => (
+            <tr key={invoice.id}>
+              <td>{invoice.id}</td>
+              <td>{invoice.company}</td>
+              <td>{invoice.description}</td>
+              <td>{invoice.amount}</td>
+              <td>
+                <Link to="/invoices/1/edit">Edit</Link>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>
