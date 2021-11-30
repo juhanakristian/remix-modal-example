@@ -28,7 +28,6 @@ export let loader: LoaderFunction = ({ params }) => {
     company: "Remix",
     description: "Invoice for Remix license",
     amount: "200",
-    date: "11.11.2021",
   });
 };
 
@@ -45,7 +44,6 @@ export default function Edit() {
     company: data.company,
     description: data.description,
     amount: data.amount,
-    date: data.date,
   });
 
   function handleChange(event: React.FormEvent<HTMLFormElement>) {
@@ -64,7 +62,8 @@ export default function Edit() {
       aria-label="Add invoice"
       onDismiss={onDismiss}
     >
-      <Form method="post" replace onChange={handleChange}>
+      <h3>Edit invoice</h3>
+      <Form className="form" method="post" replace onChange={handleChange}>
         <label className="label" htmlFor="company">
           Company
         </label>
@@ -79,7 +78,7 @@ export default function Edit() {
           Description
         </label>
         <textarea
-          className="input"
+          className="textarea"
           name="description"
           value={formData.description}
           rows={10}
@@ -91,12 +90,6 @@ export default function Edit() {
           type="number"
           name="amount"
           value={formData.amount}
-        />
-        <input
-          className="input"
-          type="date"
-          name="date"
-          value={formData.date}
         />
 
         <div className="actions">

@@ -29,3 +29,12 @@
   margin-top: 10px;
   gap: 10px;
 }
+
+.textarea {
+  height: 100px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
