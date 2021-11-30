@@ -7,7 +7,7 @@ import { Form } from "remix";
 import { useNavigate } from "remix";
 import styles from "@reach/dialog/styles.css";
 
-import stylesUrl from "~/styles/invoices/edit.css";
+import stylesUrl from "~/styles/invoices/dialog.css";
 
 export let links: LinksFunction = () => {
   return [

@@ -3,13 +3,18 @@ import type { ActionFunction, LinksFunction } from "remix";
 import { Form } from "remix";
 import { useNavigate } from "remix";
 import styles from "@reach/dialog/styles.css";
+import stylesUrl from "~/styles/invoices/dialog.css";
 
 export let links: LinksFunction = () => {
   return [
     {
       rel: "stylesheet",
-      href: styles
-    }
+      href: styles,
+    },
+    {
+      rel: "stylesheet",
+      href: stylesUrl,
+    },
   ];
 };
 
@@ -25,16 +30,31 @@ export default function Add() {
     navigate(-1);
   }
   return (
-    <Dialog isOpen={true} aria-label="Add invoice" onDismiss={onDismiss}>
-      <Form method="post" replace>
-        <label>Company</label>
-        <input type="text" />
-        <label>Amount</label>
-        <input type="text" />
-        <button type="submit">Add</button>
-        <button type="button" onClick={onDismiss}>
-          Cancel
-        </button>
+    <Dialog
+      className="dialog"
+      isOpen={true}
+      aria-label="Add invoice"
+      onDismiss={onDismiss}
+    >
+      <Form className="form" method="post" replace>
+        <label className="label" htmlFor="company">
+          Company
+        </label>
+        <input className="input" type="text" name="company" />
+
+        <label className="label" htmlFor="description">
+          Description
+        </label>
+        <textarea className="textarea" name="description" rows={10} />
+
+        <label className="label">Amount</label>
+        <input className="input" type="number" name="amount" />
+        <div className="actions">
+          <button type="submit">Add</button>
+          <button type="button" onClick={onDismiss}>
+            Cancel
+          </button>
+        </div>
       </Form>
     </Dialog>
   );
