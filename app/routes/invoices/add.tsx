@@ -27,7 +27,7 @@ export default function Add() {
   const navigate = useNavigate();
 
   function onDismiss() {
-    navigate(-1);
+    navigate("/invoices");
   }
   return (
     <Dialog

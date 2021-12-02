@@ -52,7 +52,7 @@ export default function Edit() {
   }
 
   function onDismiss() {
-    navigate(-1);
+    navigate("/invoices");
   }
 
   return (
