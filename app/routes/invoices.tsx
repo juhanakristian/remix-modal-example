@@ -9,11 +9,14 @@ import {
 
 import stylesUrl from "~/styles/invoices/table.css";
 
+import { db } from "~/utils/db.server";
+
 interface Invoice {
   id: number;
   company: string;
   description: string;
   amount: number;
+  date: Date;
 }
 
 export let links: LinksFunction = () => {
@@ -25,29 +28,9 @@ export let links: LinksFunction = () => {
   ];
 };
 
-export let loader: LoaderFunction = ({ params }) => {
-  return json([
-    {
-      id: 1,
-      company: "Remix",
-      description: "Invoice for Remix license",
-      amount: "200",
-    },
-
-    {
-      id: 2,
-      company: "Remix",
-      description: "Invoice for Remix license",
-      amount: "200",
-    },
-
-    {
-      id: 3,
-      company: "Remix",
-      description: "Invoice for Remix license",
-      amount: "200",
-    },
-  ]);
+export let loader: LoaderFunction = async ({ params }) => {
+  const invoices = await db.invoice.findMany();
+  return json(invoices);
 };
 
 export default function Invoices() {
@@ -65,6 +48,7 @@ export default function Invoices() {
             <th>Description</th>
             <th>Amount</th>
             <th>Date</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -74,6 +58,7 @@ export default function Invoices() {
               <td>{invoice.company}</td>
               <td>{invoice.description}</td>
               <td>{invoice.amount}</td>
+              <td>{invoice.date}</td>
               <td>
                 <Link to="/invoices/1/edit">Edit</Link>
               </td>

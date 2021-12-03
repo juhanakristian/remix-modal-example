@@ -1,9 +1,10 @@
 import Dialog from "@reach/dialog";
-import type { ActionFunction, LinksFunction } from "remix";
+import { ActionFunction, LinksFunction, redirect } from "remix";
 import { Form } from "remix";
 import { useNavigate } from "remix";
 import styles from "@reach/dialog/styles.css";
 import stylesUrl from "~/styles/invoices/dialog.css";
+import { db } from "~/utils/db.server";
 
 export let links: LinksFunction = () => {
   return [
@@ -18,9 +19,42 @@ export let links: LinksFunction = () => {
   ];
 };
 
-export let action: ActionFunction = ({ request }) => {
-  console.log(request);
-  return null;
+export let action: ActionFunction = async ({ request }) => {
+  console.log("request", request);
+  const form = await request.formData();
+  const company = form.get("company");
+  const description = form.get("description");
+  const amount = form.get("amount");
+  const date = form.get("date");
+
+  if (!company || !description || !amount || !date) {
+    return { formError: "Please fill all fields" };
+  }
+
+  console.log(typeof date);
+  console.log(typeof company);
+  console.log(typeof amount);
+  console.log(typeof description);
+
+  if (
+    typeof company !== "string" ||
+    typeof description !== "string" ||
+    typeof amount !== "string" ||
+    typeof date !== "string"
+  ) {
+    return { formError: "Invalid value" };
+  }
+
+  const invoice = await db.invoice.create({
+    data: {
+      company,
+      description,
+      date: new Date(date),
+      amount: parseFloat(amount),
+    },
+  });
+
+  return redirect(`/invoices/`);
 };
 
 export default function Add() {
@@ -49,6 +83,7 @@ export default function Add() {
 
         <label className="label">Amount</label>
         <input className="input" type="number" name="amount" />
+        <input className="input" type="date" name="date" />
         <div className="actions">
           <button type="submit">Add</button>
           <button type="button" onClick={onDismiss}>
