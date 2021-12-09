@@ -1,5 +1,11 @@
 import Dialog from "@reach/dialog";
-import { ActionFunction, LinksFunction, redirect } from "remix";
+import {
+  ActionFunction,
+  json,
+  LinksFunction,
+  redirect,
+  useActionData,
+} from "remix";
 import { Form } from "remix";
 import { useNavigate } from "remix";
 import styles from "@reach/dialog/styles.css";
@@ -19,22 +25,54 @@ export let links: LinksFunction = () => {
   ];
 };
 
+function validateAmount(amount: string) {
+  const amountNumber = Number(amount);
+  if (isNaN(amountNumber) || amountNumber <= 0) {
+    return "Amount must be a number greater than 0";
+  }
+}
+
+function validateCompany(company: string) {
+  if (company.length < 3) {
+    return "Company must be at least 3 characters";
+  }
+}
+
+function validateDate(date: string) {
+  if (isNaN(new Date(date).getTime())) {
+    return "Date must be a valid date";
+  }
+}
+
+function validateDescription(description: string) {
+  if (typeof description !== "string") {
+    return "Description must be a string";
+  }
+}
+
+type ActionData = {
+  formError?: string;
+  fieldErrors?: {
+    company: string | undefined;
+    amount: string | undefined;
+    date: string | undefined;
+    description: string | undefined;
+  };
+  fields?: {
+    company: string;
+    amount: string;
+    date: string;
+    description: string;
+  };
+};
+
+const badRequest = (data: ActionData) => json(data, { status: 400 });
 export let action: ActionFunction = async ({ request }) => {
-  console.log("request", request);
   const form = await request.formData();
   const company = form.get("company");
   const description = form.get("description");
   const amount = form.get("amount");
   const date = form.get("date");
-
-  if (!company || !description || !amount || !date) {
-    return { formError: "Please fill all fields" };
-  }
-
-  console.log(typeof date);
-  console.log(typeof company);
-  console.log(typeof amount);
-  console.log(typeof description);
 
   if (
     typeof company !== "string" ||
@@ -42,7 +80,21 @@ export let action: ActionFunction = async ({ request }) => {
     typeof amount !== "string" ||
     typeof date !== "string"
   ) {
-    return { formError: "Invalid value" };
+    return badRequest({
+      formError: "Invalid form data",
+    });
+  }
+
+  const fields = { company, description, amount, date };
+  const fieldErrors = {
+    company: validateCompany(company),
+    amount: validateAmount(amount),
+    date: validateDate(date),
+    description: validateDescription(description),
+  };
+
+  if (Object.values(fieldErrors).some(Boolean)) {
+    return { fieldErrors, fields };
   }
 
   const invoice = await db.invoice.create({
@@ -59,6 +111,7 @@ export let action: ActionFunction = async ({ request }) => {
 
 export default function Add() {
   const navigate = useNavigate();
+  const actionData = useActionData<ActionData>();
 
   function onDismiss() {
     navigate("/invoices");
@@ -73,17 +126,62 @@ export default function Add() {
       <Form className="form" method="post" replace>
         <label className="label" htmlFor="company">
           Company
+          <input
+            className="input"
+            defaultValue={actionData?.fields?.company}
+            type="text"
+            name="company"
+          />
         </label>
-        <input className="input" type="text" name="company" />
+        {actionData?.fieldErrors?.company ? (
+          <p className="form-validation-error" role="alert" id="name-error">
+            {actionData.fieldErrors.company}
+          </p>
+        ) : null}
 
         <label className="label" htmlFor="description">
           Description
+          <textarea
+            className="textarea"
+            defaultValue={actionData?.fields?.description}
+            name="description"
+            rows={10}
+          />
         </label>
-        <textarea className="textarea" name="description" rows={10} />
+        {actionData?.fieldErrors?.description ? (
+          <p className="form-validation-error" role="alert" id="name-error">
+            {actionData.fieldErrors.description}
+          </p>
+        ) : null}
 
-        <label className="label">Amount</label>
-        <input className="input" type="number" name="amount" />
-        <input className="input" type="date" name="date" />
+        <label className="label">
+          Amount
+          <input
+            className="input"
+            defaultValue={actionData?.fields?.amount}
+            type="number"
+            name="amount"
+          />
+        </label>
+        {actionData?.fieldErrors?.amount ? (
+          <p className="form-validation-error" role="alert" id="name-error">
+            {actionData.fieldErrors.amount}
+          </p>
+        ) : null}
+        <label className="label">
+          Date
+          <input
+            className="input"
+            defaultValue={actionData?.fields?.date}
+            type="date"
+            name="date"
+          />
+        </label>
+        {actionData?.fieldErrors?.date ? (
+          <p className="form-validation-error" role="alert" id="name-error">
+            {actionData.fieldErrors.date}
+          </p>
+        ) : null}
         <div className="actions">
           <button type="submit">Add</button>
           <button type="button" onClick={onDismiss}>
